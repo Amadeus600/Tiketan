@@ -1,0 +1,109 @@
+.main-header {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 75px;
+    width: 100vw;
+    padding: 0 10vw;
+    z-index: 1;
+    color: rgb(255, 255, 255);
+    transition: .4s ease-out;
+    background: rgba(73, 69, 69, 0.877);
+
+    
+    a {
+        text-decoration: none;
+        color: inherit;
+        text-transform: uppercases;
+        font-size: 20px;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+
+        .nav-link {
+            transition: 
+                opacity .4s ease-in-out,
+                transform .6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                
+            a {
+                margin: .2rem;
+                padding: 1rem .5rem;
+            }
+            
+            a:hover {
+                background: rgba(133, 170, 156, 0.904);
+            }
+        }
+    }
+    .menu-icon {
+        position: relative;
+        padding: 26px 10px;
+        cursor: pointer;
+        z-index: 1;
+        // display: none;
+
+        &__line {
+            display: block;
+            position: relative;
+            background: rgb(255, 255, 255);
+            height: 2px;
+            width: 20px;
+            border-radius: 4px;
+
+            &::before, &::after {
+                content: '';
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                border-radius: 4px;
+                background: rgb(255, 255, 255);
+            }
+            &::before {
+                transform: translateY(-5px);
+            }
+            &::after {
+                transform: translateY(5px);
+            }
+        }
+    }
+    .menu-btn {
+        display: none;
+    }
+    &.scrolled {
+        height: 50px;
+        background: rgba(70, 75, 80, 0.959);
+        color: aliceblue;
+
+        .menu-icon {
+            &__icon,
+            &__icon::before,
+            &__icon::after {
+                background: aliceblue;
+            }
+        }
+    }
+}
+// .nav ul li a::before,
+// .nav ul li a::after {
+//     content: '';
+//     position: absolute;
+//     width: 100px;
+//     height: 2px;
+//     background-color: crimson;
+//     left: 0;
+//     transform: scaleX(0);
+// }
+// .nav ul li a::before {
+//     top: 0;
+// }
+// .nav ul li a::after {
+//     bottom: 0;
+// }
+// .nav ul li a:hover::before,
+// .nav ul li a:hover::after {
+//     transform: scaleX(1);
+// }
+  
