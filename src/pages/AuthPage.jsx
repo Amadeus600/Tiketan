@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { AppContext } from "../contexts/AppContext";
 import { Link } from "react-router-dom";
-import "../../scss/Login.scss";
-import { AppContext } from "../../contexts/AppContext";
+import "../scss/Login.scss";
+import routes from "../Routes";
+import axios from "axios";
 
 const Login = () => {
-  const { auth } = useContext(AppContext);
-
   const effect = () => {
     const sign_in_btn = document.querySelector("#sign-in-btn");
     const sign_up_btn = document.querySelector("#sign-up-btn");
@@ -20,29 +20,67 @@ const Login = () => {
     });
   };
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-
   useEffect(() => effect());
 
-  const signInHandler = () => {
-    auth.logIn();
+  const [telefone, setTelefone] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [valid, setValid] = useState(true);
+  const [state, setState] = useState(true);
+
+  let cancelation = axios.CancelToken.source();
+
+  const signIn = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      let response = await axios.post(
+        `${routes.baseUrl}/login`,
+        {
+          username: username,
+          password: password,
+        },
+        { cancelToken: cancelation.token }
+      );
+    } catch (e) {
+      setValid(false);
+      console.error(e);
+      setPassword("");
+    }
+    setLoading(false);
+  };
+  const signInUp = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      let response = await axios.post(
+        `${routes.baseUrl}/register`,
+        {
+          username: username,
+          password: password,
+          telefone: telefone,
+        },
+        { cancelToken: cancelation.token }
+      );
+    } catch (e) {
+      setValid(false);
+      console.error(e);
+      setPassword("");
+    }
+    setLoading(false);
   };
 
   return (
     <div className="container">
       <div className="forms-container">
         <div className="signin-signup">
-          <form
-            action="#"
-            className="sign-in-form"
-            onSubmit={() => signInHandler()}
-          >
+          <form action="#" className="sign-in-form" onSubmit={(e) => signIn(e)}>
             <h2 className="title">Sign in</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
               <input
+                id="username"
                 type="text"
                 placeholder="Username"
                 value={username}
@@ -52,13 +90,16 @@ const Login = () => {
             <div className="input-field">
               <i className="fas fa-lock"></i>
               <input
+                id="password"
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <input type="submit" value="Login" className="btn solid" />
+            <button className="btn solid">
+              {loading ? "Loading..." : "Login"}
+            </button>
             <p className="social-text">Or Sign in with social platforms</p>
             <div className="social-media">
               <Link to="#" className="social-icon">
@@ -75,7 +116,11 @@ const Login = () => {
               </Link>
             </div>
           </form>
-          <form action="#" className="sign-up-form">
+          <form
+            action="#"
+            className="sign-up-form"
+            onSubmit={(e) => signInUp(e)}
+          >
             <h2 className="title">Sign up</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
@@ -87,12 +132,12 @@ const Login = () => {
               />
             </div>
             <div className="input-field">
-              <i className="fas fa-envelope"></i>
+              <i className="fas fa-mobile-alt"></i>
               <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="No.Telp"
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
               />
             </div>
             <div className="input-field">
@@ -104,7 +149,9 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <input type="submit" className="btn" value="Sign up" />
+            <button className="btn solid">
+              {loading ? "Loading..." : "Sign Up"}
+            </button>
             <p className="social-text">Or Sign up with social platforms</p>
             <div className="social-media">
               <Link to="#" className="social-icon">
